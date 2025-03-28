@@ -1,0 +1,115 @@
+package LAB06;
+import java.util.Random;
+
+public class HomeStuff {
+    public static void main(String[] args) {
+        User user = new User("Hakki");
+        HomeAssistantSystem homeAssistantSystem = HomeAssistantSystem.getInstance();
+
+        HomeAssistantSystem.startMovieNight("Harry Potter and the Deathly Hallows Part II");
+    }
+}
+
+class DVDPlayer {
+    public static void turnOn() {
+        System.out.println("DVD Player is turning on...");
+    }
+
+    public void insertCDandPlay(String movie){
+        System.out.println("The CD of the movie " + movie + " is inserted! Playing CD...");
+    }
+}
+
+class Projector {
+    public static void turnOn() {
+        System.out.println("Projector is turning on...");
+    }
+
+    public static void setInput(String input) {
+        System.out.println("Projector input set to: " + input);
+    }
+}
+
+
+class HeatingSystem {
+    public static void setTemperature(int degree) {
+        System.out.println("Heating set to " + degree + "Â°C.");
+    }
+}
+
+
+class LightingSystem {
+    public static void setMood(String mood) {
+        System.out.println("Lighting set to " + mood + " mode.");
+    }
+}
+
+
+class SecuritySystem {
+    public static void lockDoors() {
+        System.out.println("All doors are locked.");
+    }
+
+    public static void activateCameras() {
+        System.out.println("Security cameras are now active.");
+    }
+}
+
+class User {
+    private String name;
+
+    public User(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+}
+class HomeAssistantSystem{
+
+    private static HomeAssistantSystem instance1 = null;
+    private static HomeAssistantSystem instance2 = null;
+
+    public HomeAssistantSystem(){
+        dvdplayer= new DVDPlayer();
+        projector = new Projector();
+        heatingsystem = new HeatingSystem();
+        lightingsystem = new LightingSystem();
+        securitysystem = new SecuritySystem();
+        user = new User("Sisyphos");
+    }
+    private DVDPlayer dvdplayer;
+    private Projector projector;
+    private HeatingSystem heatingsystem;
+    private LightingSystem lightingsystem;
+    private SecuritySystem securitysystem;
+    private User user;
+
+    public static synchronized HomeAssistantSystem getInstance() {
+        Random random = new Random();
+
+        if (random.nextBoolean()){
+            if (instance1 == null) {
+                instance1 = new HomeAssistantSystem();
+            }
+            return instance1;
+        }
+            else{
+                if (instance2 == null){
+                    instance2 = new HomeAssistantSystem();
+                }
+                    return instance2;
+            }
+        }
+    public static void startMovieNight(String movieName){
+        DVDPlayer.turnOn();
+        Projector.turnOn();
+        Projector.setInput("HDMI2"); //HDMI1 TV mode //
+        HeatingSystem.setTemperature(18); //It is better cold //
+        LightingSystem.setMood("cozy movie mode");
+        SecuritySystem.lockDoors();
+        SecuritySystem.activateCameras();
+        System.out.println("Home Assistant System fully activated.");
+    }
+}
