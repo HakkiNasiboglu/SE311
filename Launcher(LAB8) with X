@@ -1,0 +1,71 @@
+abstract class SpaceMission {
+    public void Launch(){
+        XbeforeLaunch();
+        performCheck();
+        astronautBriefing();
+        rocketFuelLoader();
+        missionSpecificPreparations();
+        countdown();
+        missionReport();
+    }
+
+    protected  void XbeforeLaunch(){
+    }
+    protected void performCheck(){
+        System.out.println("Performing system check...");
+    }
+    protected void astronautBriefing(){
+    }
+    protected void rocketFuelLoader(){
+        System.out.println("Rocket fueling completed.");
+    }
+    protected abstract void missionSpecificPreparations();
+    protected void countdown(){
+        System.out.println("Countdown started. Launch successful!");
+    }
+    protected abstract void missionReport();
+}
+//*************************************************************************************************//
+class SatelliteLaunch extends SpaceMission{
+    protected void missionSpecificPreparations() {
+        System.out.println("Deploying satellite payload.");
+    }
+    @Override
+    protected void missionReport() {
+        System.out.println("Mission report: Satellite successfully placed into orbit.");
+    }
+}
+//*************************************************************************************************//
+class MannedMission extends SpaceMission{
+    private void X(){
+        System.out.println("Running X first.");
+    }
+    @Override
+    protected void XbeforeLaunch(){
+        X();
+    }
+
+    @Override
+    protected void astronautBriefing(){
+        System.out.println("Giving briefs about flight to astronauts…");
+    }
+    @Override
+    protected void missionSpecificPreparations() {
+        System.out.println("Securing astronaut crew and checking life-support systems.");
+    }
+    @Override
+    protected void missionReport() {
+        System.out.println("Mission report: Astronauts safely route to the space station.");
+    }
+}
+//*************************************************************************************************//
+public class Launcher{
+    public static void main(String[] args){
+        SpaceMission satelliteLaunch = new SatelliteLaunch();
+        SpaceMission mannedMission = new MannedMission();
+        System.out.println("Satellite:");
+        satelliteLaunch.Launch();
+        System.out.println("Manned Mission:");
+        mannedMission.Launch();
+    }
+}
