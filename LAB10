@@ -1,0 +1,111 @@
+import javax.naming.OperationNotSupportedException;
+
+interface Node{
+    int accept(Visitor visitor);
+}
+interface Visitor{
+    int visit(NumberNode Node);
+    int visit(SummationNode Node);
+    int visit(SubtractionNode Node);
+    int visit(MultiplicationNode Node);
+}
+
+class NumberNode implements Node{
+    private final int val;
+
+    NumberNode(int val) {
+        this.val = val;
+    }
+
+    @Override
+    public int accept(Visitor visitor) {
+        return visitor.visit(this);
+    }
+
+    public int getVal() {
+        return val;
+    }
+}
+
+abstract class BinaryNode implements Node{
+    protected Node left, right;
+
+    BinaryNode(Node left, Node right){
+        this.left = left;
+        this.right = right;
+    }
+    public Node getLeft() {
+        return left;
+    }
+    public Node getRight() {
+        return right;
+    }
+}
+class SummationNode extends BinaryNode{
+    public SummationNode(Node left, Node right){
+        super(left, right);
+    }
+    @Override
+    public int accept(Visitor visitor) {
+        return visitor.visit(this);
+    }
+}
+class SubtractionNode extends BinaryNode{
+    public SubtractionNode(Node left, Node right){
+        super(left, right);
+    }
+    @Override
+    public int accept(Visitor visitor) {
+        return visitor.visit(this);
+    }
+}
+class MultiplicationNode extends BinaryNode{
+    public MultiplicationNode(Node left, Node right){
+        super(left, right);
+    }
+    @Override
+    public int accept(Visitor visitor) {
+        return visitor.visit(this);
+    }
+}
+class DivisionNode extends BinaryNode{
+    public DivisionNode(Node left, Node right){
+        super(left, right);
+        throw new UnsupportedOperationException("Error");
+    }
+    @Override
+    public int accept(Visitor visitor) {
+        throw new UnsupportedOperationException("Error");
+    }
+}
+class EvalVisit implements Visitor{
+
+    @Override
+    public int visit(NumberNode Node) {
+        return Node.getVal();
+    }
+
+    @Override
+    public int visit(SummationNode Node) {
+        return Node.getLeft().accept(this) + Node.getRight().accept(this);
+    }
+
+    @Override
+    public int visit(SubtractionNode Node) {
+        return Node.getLeft().accept(this) - Node.getRight().accept(this);
+    }
+
+    @Override
+    public int visit(MultiplicationNode Node) {
+        return Node.getLeft().accept(this) * Node.getRight().accept(this);
+    }
+}
+public class AST{
+    public static void main(String[] args){
+        Node equation = new MultiplicationNode(new SummationNode( new NumberNode(7), new NumberNode(3)), new SubtractionNode(new NumberNode(10), new NumberNode(4)));
+        Visitor evaluator = new EvalVisit();
+        int result = equation.accept(evaluator);
+        System.out.println(result);
+    }
+}
+
